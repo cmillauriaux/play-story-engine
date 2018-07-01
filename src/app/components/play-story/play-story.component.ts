@@ -17,6 +17,7 @@ export class PlayStoryComponent implements OnInit {
   public dialog: Dialog;
   public currentDialogIdx = 0;
   public choices: Choice[];
+  public isPostChoice = false;
 
   constructor(private storyService: StoryService) { }
 
@@ -28,6 +29,7 @@ export class PlayStoryComponent implements OnInit {
     this.choices = undefined;
     this.dialog = undefined;
     this.currentDialogIdx = 0;
+    this.isPostChoice = false;
     this.sequence = await this.storyService.getSequence();
     if (this.sequence.dialogs && this.sequence.dialogs.length > 0) {
       this.displayDialogs();
@@ -58,17 +60,33 @@ export class PlayStoryComponent implements OnInit {
 
   async makeChoice(choice: number) {
     const consequences = await this.storyService.makeChoice(choice);
-    console.log(consequences);
-    this.loadSequence();
+    for (const consequence of consequences) {
+      if (consequence.type === 'text') {
+        this.dialog = {
+          text: consequence.name,
+          foreground: ''
+        };
+        this.isPostChoice = true;
+      }
+    }
+    if (!this.isPostChoice) {
+      this.loadSequence();
+    } else {
+      this.choices = undefined;
+    }
   }
 
   async nextDialog() {
     if (this.dialog) {
-      this.currentDialogIdx++;
-      if (this.sequence.dialogs && this.sequence.dialogs.length > 0 && this.currentDialogIdx < this.sequence.dialogs.length) {
-        this.dialog = this.sequence.dialogs[this.currentDialogIdx];
+      if (this.isPostChoice) {
+        this.loadSequence();
       } else {
-        this.displayChoices();
+        this.currentDialogIdx++;
+        if (this.sequence.dialogs && this.sequence.dialogs.length > 0 && this.currentDialogIdx < this.sequence.dialogs.length) {
+          this.dialog = this.sequence.dialogs[this.currentDialogIdx];
+        } else {
+          this.displayChoices();
+        }
       }
     }
   }
