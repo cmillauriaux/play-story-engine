@@ -1,0 +1,38 @@
+<section class="hero is-primary is-large">
+  <div class="hero-head">
+    <h1 class="title">
+      Play Story Engine
+    </h1>
+    <p class="subtitle">
+      Load a story and
+      <strong>let's play</strong>!
+    </p>
+  </div>
+  <div class="hero-body">
+    <div class="notification is-danger" *ngIf="error">
+      <button class="delete"></button>
+      Cannot read story. Check if this directory contains YML files with at least a "story" element
+    </div>
+    <div class="container has-text-centered">
+      <a class="button is-large is-rounded" (click)="loadStory()">Load a story</a>
+      <input #selectDirectoryButton type="file" webkitdirectory style="display: none" (change)="selectStoryDirectory($event)" />
+    </div>
+  </div>
+  <div class="hero-foot">
+    <nav class="tabs">
+      <div class="container">
+        <ul>
+          <li>
+            <a>GitHub</a>
+          </li>
+          <li>
+            <a>Help</a>
+          </li>
+          <li>
+            <a>Contact us</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+</section>

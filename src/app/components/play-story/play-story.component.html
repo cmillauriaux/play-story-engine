@@ -1,0 +1,15 @@
+<div class="container dialog">
+  <div class="container has-text-centered" *ngIf="dialog" (click)="nextDialog()">
+    <span class="character" *ngIf="dialog?.character">
+      {{dialog?.character}} : 
+    </span>
+    {{dialog?.text}}
+  </div>
+  <div class="container" *ngIf="choices">
+    <div class="columns">
+      <div class="column has-text-centered" *ngFor="let choice of choices" (click)="makeChoice(choice.order)">
+        <a class="button is-rounded">{{choice.title}}</a>
+      </div>
+    </div>
+  </div>
+</div>
